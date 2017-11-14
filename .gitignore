@@ -34,3 +34,8 @@ xcuserdata/
 *.so
 *.dll
 *.dylib
+
+#Notes that I don't want to commit to github
+./Questions
+./Notes
+./PreQuiz
