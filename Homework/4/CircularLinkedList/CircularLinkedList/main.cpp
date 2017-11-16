@@ -6,36 +6,46 @@
 //  Copyright © 2017 LK. All rights reserved.
 //
 
+#include <stdio.h>
+
+//
+//  main.cpp
+//  CircularLinkedList
+//
+//  Created by Laura Kirby on 11/16/17.
+//  Copyright © 2017 LK. All rights reserved.
+//
+
 #include <iostream>
 
 /*
 
-A circular linked list is one in which the next field for the last link
-node of the list points to the first link node of the list. This can
-be useful when you wish to have a relative positioning for elements, but
-no concept of an absolute first or last position. If the problem domain
-is inherently circular or rotational we can use circular linked lists
-for implementations.
- 
-Some examples include:
- 1. Multiplayer online games with players who take turns: ex monopoly
- 2. Time sharing in operating systems; fixed number of users 
-    (programs) are waiting for their turn.
-    - Ex Round-Robin algorithm
-    - Jitter buffers in VOIP or online video stream: wait and collect 
-      voice data packets (can arrive at various time interval due to 
-      network latency) received for subsequent continuous play back
+ A circular linked list is one in which the next field for the last link
+ node of the list points to the first link node of the list. This can
+ be useful when you wish to have a relative positioning for elements, but
+ no concept of an absolute first or last position. If the problem domain
+ is inherently circular or rotational we can use circular linked lists
+ for implementations.
 
-To do:
- 1. Implement circular singly linked lists by modifying the code of 
-    Figure 4.8 (PDF ebook, page 107).
+ Some examples include:
+ 1. Multiplayer online games with players who take turns: ex monopoly
+ 2. Time sharing in operating systems; fixed number of users
+ (programs) are waiting for their turn.
+ - Ex Round-Robin algorithm
+ - Jitter buffers in VOIP or online video stream: wait and collect
+ voice data packets (can arrive at various time interval due to
+ network latency) received for subsequent continuous play back
+
+ To do:
+ 1. Implement circular singly linked lists by modifying the code of
+ Figure 4.8 (PDF ebook, page 107).
  2. Test your circular linked list
-    - Create a circular linked list with 10 integer elements. 
-    - Traverse the list and print the each node value until the user 
-      enters the escape key (esc). 
+ - Create a circular linked list with 10 integer elements.
+ - Traverse the list and print the each node value until the user
+ enters the escape key (esc).
  3. Upload your program as a single file here.
 
-*/
+ */
 
 #include <cstdlib>
 using namespace std;
@@ -107,13 +117,14 @@ private:
     int cnt; // Size of list
     void init() { // Intialization helper method
         curr = tail = head = new Link<E>;
+        tail->next = head;
         cnt = 0;
     }
     void removeall() { // Return link nodes to free store
         while(head != NULL) {
             curr = head;
             head = head->next;
-            delete curr;
+            //            delete curr;
         }
     }
 public:
@@ -125,6 +136,7 @@ public:
     void insert(const E& it) {
         curr->next = new Link<E>(it, curr->next);
         if (tail == curr) tail = curr->next; // New tail
+        tail->next = head;
         cnt++;
     }
     void append(const E& it) { // Append "it" to list
@@ -176,79 +188,38 @@ public:
         Assert(curr->next != NULL, "No value");
         return curr->next->element;
     }
+
+    // press enter to begin circular printing
+    void printAllElements(){
+        Link<E>* temp = head;
+        char leave = 1;
+        while (temp){
+            if (temp != head && temp != tail) {
+                cout << "element" << temp->element << "\n";
+                leave = getchar();
+                if (leave == 27){
+                    break;
+                };
+            }
+            temp = temp->next;
+        };
+    }
 };
 
 
 int main(int argc, const char * argv[]) {
-    /*
-     The objective of this question is to demonstrate the arrays inability to dynamic resizing. Please use the template file, linkedList.cpp file I posted to Canvas as your template. You should add the following to the above code:
-
-     1. Declare an integer array with length 3.
-     2. Declare an integer linked list.
-     3. In main, write a function that will take in 3 integer inputs from command line.
-        - Add each received input to the array and the linked list.
-     4. Repeat step 3, this time with 5 integer inputs from the commland line.
-     5. Compare your observations.
-     6. Upload your file.
-     */
-
-    // 1. Declare an integer array with length 3.
-    int intArray[3] = {0,0,0};
-    int value;
-
-
-    // 2. Declare an integer linked list.
+    // Create a circular linked list with 10 integer elements.
     LList<int> linkedList;
-
-
-    // 3. In main, write a function that will take in 3 integer inputs from command line.
-    // - Add each received input to the array and the linked list.
-
-
-    for (int i = 0; i <= 3; i++ ) {
-        cout << "\n\nenter preferred value into console." << endl;
-        cin >> value;
-        linkedList.insert(value);
-        cout << "value added to Linked List: " << value << endl;
+    for (int i = 1; i <= 10; i++) {
+        linkedList.insert(i);
     }
 
+    // Test your circular linked list
+    // Traverse the list and print the each node value until
+    // the user enters the escape key (esc)
 
-    for (int i = 0; i <= 3; i++ ) {
-        cout << "\n\nenter preferred value into console." << endl;
-        cin >> value;
-        intArray[i] = value;
-        cout << "value added to Array List: " << value << endl;
-    }
-
-
-    // 4. Repeat step 3, this time with 5 integer inputs from the commland line.
-    for (int i = 0; i <= 5; i++ ) {
-        cout << "\n\nenter preferred value into console." << endl;
-        cin >> value;
-        linkedList.insert(value);
-        cout << "value added to Linked List: " << value << endl;
-    }
-
-    for (int i = 0; i <= 5; i++ ) {
-        cout << "\n\nenter preferred value into console." << endl;
-        cin >> value;
-        if (i == 4) cout << "PROGRAM IS ABOUT TO CRASH!" << endl;
-        intArray[i] = value;
-        cout << "value added Array List:" << value << endl;
-    }
-
-
-    // 5. Compare your observations.
-
-    // Linked list will allow you to continually add items to
-    // a linked list instance as long as you don't run out of memory.
-    // This shows that the list is dynamically resized.
-    // as long as you don't run out of memory.
-
-    // Array list does not allow you to dynamically resize, meaning the
-    // an error will be thrown when you try to add a value that is out
-    // of bounds.
-
-
+    cout << "press enter to begin circular printing" << "\n";
+    linkedList.printAllElements();
+    
     return 0;
 }
