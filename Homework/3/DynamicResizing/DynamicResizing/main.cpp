@@ -9,16 +9,22 @@
 #include <iostream>
 
 /*
-The objective of this question is to demonstrate the arrays inability to dynamic resizing. Please use the template file, linkedList.cpp file I posted to Canvas as your template. You should add the following to the above code:
 
-1. Declare an integer array with length 3.
-2. Declare an integer linked list.
-3. In main, write a function that will take in 3 integer inputs from command line.
-   - Add each received input to the array and the linked list.
-4. Repeat step 3, this time with 5 integer inputs from the commland line.
-6. Compare your observations.
-7. Upload your file.
-*/
+ Objective: demonstrate an array's inability to dynamically resize.
+
+ 1. Within Canvas, navigate to the "Files" section and download the template file titled, "linkedList.cpp".
+
+ 2. Add the following to "main.cpp":
+ 1. Declare an integer array with length 3.
+ 2. Declare an integer linked list.
+ 3. Write a function that will take in 3 integer inputs from command line.
+    - Add each received input to the array and the linked list.
+ 4. Repeat step 3, this time with 5 integer inputs from the commland line.
+ 5. Write your observations as comments.
+
+ 3. Upload your "main.cpp" file.
+
+ */
 
 #include <cstdlib>
 using namespace std;
@@ -178,7 +184,6 @@ int main(int argc, const char * argv[]) {
     // 1. Declare an integer array with length 3.
     int intArray[3] = {0,0,0};
     int value;
-    int i = 0;
 
 
     // 2. Declare an integer linked list.
@@ -187,43 +192,48 @@ int main(int argc, const char * argv[]) {
 
     // 3. In main, write a function that will take in 3 integer inputs from command line.
     // - Add each received input to the array and the linked list.
-    while (i < 3){
+
+
+    for (int i = 0; i <= 3; i++ ) {
+        cout << "\n\nenter preferred value into console." << endl;
         cin >> value;
         linkedList.insert(value);
         cout << "value added to Linked List: " << value << endl;
-        i ++;
     }
 
-    while (i < 3){
+
+    for (int i = 0; i <= 3; i++ ) {
+        cout << "\n\nenter preferred value into console." << endl;
         cin >> value;
         intArray[i] = value;
         cout << "value added to Array List: " << value << endl;
-        i ++;
     }
 
 
     // 4. Repeat step 3, this time with 5 integer inputs from the commland line.
-    i = 0;
-    while (i < 5){
+    for (int i = 0; i <= 5; i++ ) {
+        cout << "\n\nenter preferred value into console." << endl;
         cin >> value;
         linkedList.insert(value);
         cout << "value added to Linked List: " << value << endl;
-        i ++;
     }
 
-    while (i < 5){
+    for (int i = 0; i <= 5; i++ ) {
+        cout << "\n\nenter preferred value into console." << endl;
         cin >> value;
+        if (i == 4) cout << "PROGRAM IS ABOUT TO CRASH!" << endl;
         intArray[i] = value;
         cout << "value added Array List:" << value << endl;
-        i ++;
     }
 
 
     // 5. Compare your observations.
+
     // Linked list will allow you to continually add items to
     // a linked list instance as long as you don't run out of memory.
     // This shows that the list is dynamically resized.
     // as long as you don't run out of memory.
+
     // Array list does not allow you to dynamically resize, meaning the
     // an error will be thrown when you try to add a value that is out
     // of bounds.
