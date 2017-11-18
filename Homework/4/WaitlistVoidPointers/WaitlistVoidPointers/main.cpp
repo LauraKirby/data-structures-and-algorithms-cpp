@@ -44,15 +44,18 @@ template <typename E>
         public:
             E element; // Value for this node
             Link *next; // Pointer to next node in list
+            const void *charIntDouble;
 
 
             // Constructors
-            Link(const E& elemval, Link* nextval = NULL) {
-                element = elemval; next = nextval;
+            Link(const E& elemval, const void* charIntDoub = NULL, Link* nextval = NULL) {
+                element = elemval;
+                next = nextval;
+                charIntDouble = charIntDoub;
             }
 
 
-            Link(Link* nextval =NULL) {
+            Link(Link* nextval = NULL) {
                 next = nextval;
             }
     };
@@ -67,6 +70,7 @@ template <typename E>
         public:
             // Constructor
             Queue() {}
+
             // Base destructor
             virtual ~Queue() {}
 
@@ -76,7 +80,7 @@ template <typename E>
 
             // Place an element at the rear of the queue.
             // it: The element being enqueued.
-            virtual void enqueue(const E&) = 0;
+            virtual void enqueue(const E&, const void* a = NULL) = 0;
 
             // Remove and return element at the front of the queue.
             // Return: The element at the front of the queue.
@@ -117,8 +121,8 @@ template <typename E>
             }
 
             // Put element on rear
-            void enqueue(const E& it) {
-                rear->next = new Link<E>(it, NULL);
+            void enqueue(const E& it, const void* a = NULL ) {
+                rear->next = new Link<E>(it, a, NULL);
                 rear = rear->next;
                 size++;
             }
@@ -147,35 +151,49 @@ template <typename E>
             }
     };
 
+// DEMO FUNCTION: A function that accepts a void pointer
+// void f(const void* a)
+// {
+//     std::cout<<"(void*)fun is called\n";
+//    std::cout<< "value for a: " << *(int*)a << '\n';
+// }
 
 int main() {
+    //    // SEE: DEMO FUNCTION
+    //    int a = 9;
+    //    int b = 3;
+    //    void* c = static_cast<int*>(&a);
+    //    f(&b);
+    //    f(c);
 
-    int arr[6] = {5, 10, 15, 20, 25, 30};
+    int int1 = 9;
+    int int2 = 9;
+    string str1 = "hello";
+    string str2 = "bye";
+    double double1 = 1.000234567;
+    double double2 = 1.234567;
+
+    void* strVoidPtr = static_cast<string*>(&str1);
+    void* strVoidPtr2 = static_cast<string*>(&str2);
+    void* intVoidPtr = static_cast<int*>(&int1);
+    void* intVoidPtr2 = static_cast<int*>(&int2);
+    void* doubleVoidPtr = static_cast<double*>(&double1);
+    void* doubleVoidPtr2 = static_cast<double*>(&double2);
 
     LQueue<int> lQue;
-    LQueue<int> lQue2;
-
-    // create a limit for when to stop iterating over "arr"
-    const int numOfValues = sizeof(arr) / sizeof(arr[0]);
-
-    // iterate over array of integers and add them to the queue
-    for(int i = 0; i < numOfValues; i++){
-        lQue.enqueue(arr[i]);
-    }
-
-    // store front value in variable "peek" and print to ensure new front value is 5
-    const int peek = lQue.frontValue();
-    cout << peek << endl;
-
-    // remove item from queue
-    lQue.dequeue();
+    lQue.enqueue(1, strVoidPtr);
+    lQue.enqueue(2, strVoidPtr2);
+    lQue.enqueue(3, intVoidPtr);
+    lQue.enqueue(4, intVoidPtr2);
+    lQue.enqueue(5, doubleVoidPtr);
+    lQue.enqueue(6, doubleVoidPtr2);
 
     // store front value in variable "peek2" and print to ensure new front value is 10
     const int peek2 = lQue.frontValue();
     cout << peek2 << endl;
 
-    // store length in variable "qLength" and print to ensure length returns 5
-    // check lencth of queue
+    // store length in variable "qLength" and print to ensure length returns 6
+    // check length of queue
     const int qLength = lQue.length();
     cout << "qLength: " << qLength << endl;
 
