@@ -16,7 +16,7 @@ template <typename Key, typename E>
 class BST : public Dictionary<Key,E> {
 private:
     BSTNode<Key,E>* root;   // Root of the BST
-    int nodecount;         // Number of nodes in the BST
+    int nodecount;          // Number of nodes in the BST
 
     // Private "helper" functions
     void clearhelp(BSTNode<Key, E>*);
@@ -33,8 +33,6 @@ private:
 public:
     BST() { root = NULL; nodecount = 0; }  // Constructor
     ~BST() { clearhelp(root); }            // Destructor
-
-//    BST() { postOrderHelper(root);};
 
     void clear()   // Reinitialize tree
     { clearhelp(root); root = NULL; nodecount = 0; }
@@ -58,6 +56,7 @@ public:
         }
         return temp;
     }
+
     // Remove and return the root node from the dictionary.
     // Return: The record removed, null if tree is empty.
     E removeAny() {  // Delete min value
@@ -96,17 +95,6 @@ clearhelp(BSTNode<Key, E>* root) {
     delete root;
 }
 
-template <typename Key, typename E>
-void BST<Key, E>:: postOrderHelper(BSTNode<Key, E>* root, int level) const {
-    if (root == NULL) return;
-    postOrder(root->left());
-    postOrder(root->right());
-
-
-    cout << root->key() << "\n";
-    return;
-}
-
 // Insert a node into the BST, returning the updated tree
 template <typename Key, typename E>
 BSTNode<Key, E>* BST<Key, E>::inserthelp(
@@ -127,12 +115,13 @@ getmin(BSTNode<Key, E>* rt) {
         return rt;
     else return getmin(rt->left());
 }
+
 template <typename Key, typename E>
 BSTNode<Key, E>* BST<Key, E>::
 deletemin(BSTNode<Key, E>* rt) {
-    if (rt->left() == NULL) // Found min
+    if (rt->left() == NULL)             // Found min
         return rt->right();
-    else {                      // Continue left
+    else {                              // Continue left
         rt->setLeft(deletemin(rt->left()));
         return rt;
     }
@@ -143,22 +132,22 @@ deletemin(BSTNode<Key, E>* rt) {
 template <typename Key, typename E>
 BSTNode<Key, E>* BST<Key, E>::
 removehelp(BSTNode<Key, E>* rt, const Key& k) {
-    if (rt == NULL) return NULL;    // k is not in tree
+    if (rt == NULL) return NULL;        // k is not in tree
     else if (k < rt->key())
         rt->setLeft(removehelp(rt->left(), k));
     else if (k > rt->key())
         rt->setRight(removehelp(rt->right(), k));
-    else {                            // Found: remove it
+    else {                              // Found: remove it
         BSTNode<Key, E>* temp = rt;
-        if (rt->left() == NULL) {     // Only a right child
-            rt = rt->right();         //  so point to right
+        if (rt->left() == NULL) {       // Only a right child
+            rt = rt->right();           //  so point to right
             delete temp;
         }
         else if (rt->right() == NULL) { // Only a left child
-            rt = rt->left();          //  so point to left
+            rt = rt->left();            //  so point to left
             delete temp;
         }
-        else {                    // Both children are non-empty
+        else {                          // Both children are non-empty
             BSTNode<Key, E>* temp = getmin(rt->right());
             rt->setElement(temp->element());
             rt->setKey(temp->key());
@@ -177,7 +166,7 @@ E BST<Key, E>::findhelp(BSTNode<Key, E>* root, const Key& k) const {
         return findhelp(root->left(), k);   // Check left
     else if (k > root->key())
         return findhelp(root->right(), k);  // Check right
-    else return root->element();  // Found it
+    else return root->element();            // Found it
 }
 
 // Print out a BST
