@@ -97,8 +97,9 @@ clearhelp(BSTNode<Key, E>* root) {
 
 // Insert a node into the BST, returning the updated tree
 template <typename Key, typename E>
-BSTNode<Key, E>* BST<Key, E>::inserthelp(
-                                         BSTNode<Key, E>* root, const Key& k, const E& it) {
+BSTNode<Key, E>* BST<Key, E>::inserthelp( BSTNode<Key, E>* root,
+                                          const Key& k,
+                                          const E& it ) {
     if (root == NULL)  // Empty tree: create node
         return new BSTNode<Key, E>(k, it, NULL, NULL);
     if (k < root->key())

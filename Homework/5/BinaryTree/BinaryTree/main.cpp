@@ -35,12 +35,19 @@ int main(int argc, const char * argv[]) {
 
     cout << "Size: " << tree.size() << "\n";
 
-    tree.insert(100, new Int(100));
-
     tree.print();
 
     cout << "Size: " << tree.size() << "\n";
 
+    int unsortedList[10] =  {4, 1, 5, 2, 9, 8, 7, 0, 3, 6};
+
+    for (int i = 0; i < 10; i++ ) {
+        cout << "\n\nenter preferred value into tree." << endl;
+        tree.insert(unsortedList[i], new Int(unsortedList[i]));
+        cout << "value added to BST: " << unsortedList[i] << endl;
+    }
+
+    tree.print();
 
     return 0;
 }
