@@ -1,130 +1,16 @@
-//
-//  main.cpp
-//  BinaryTree
-//
-//  Created by Laura Kirby on 11/28/17.
-//  Copyright © 2017 LK. All rights reserved.
-//
-/*
- 
-SOLUTION BEGINS ON LINE 310
- 
-Given an array of integers, implement a binary tree based algorithm in C++
- to print the array in sorted order. Here you will have to use some 
- inherent properties of the suitable type of the binary tree and the 
- appropriate tree traversal method. Complete the following:
+// From the software distribution accompanying the textbook
+// "A Practical Introduction to Data Structures and Algorithm Analysis,
+// Third Edition (C++)" by Clifford A. Shaffer.
+// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.
 
- 1. Write a function called BTSort
- 2. Write a driver program to test out your method for the array 
-    {4, 1, 5, 2, 9, 8, 7, 0, 3, 6}
- 3. Analyze the time complexity of your program for the best and worst 
-    cases. Write your findings as a comment in your BTSort function.
+// This file includes all of the pieces of the BST implementation
 
-*/
+// Include the node implementation
+#include "BSTNode.h"
+#include "dictionary.h"
 
-#include <iostream>
-using namespace std;
-
-// The Dictionary abstract class.
-template <typename Key, typename E>
-class  Dictionary {
-private:
-    void operator =(const Dictionary&) {}
-    Dictionary(const Dictionary&) {}
-
-public:
-    Dictionary() {}          // Default constructor
-    virtual ~Dictionary() {} // Base destructor
-
-    // Reinitialize dictionary
-    virtual void clear() = 0;
-
-    // Insert a record
-    // k: The key for the record being inserted.
-    // e: The record being inserted.
-    virtual void insert(const Key& k, const E& e) = 0;
-
-    // Remove and return a record.
-    // k: The key of the record to be removed.
-    // Return: A maching record. If multiple records match
-    // "k", remove an arbitrary one. Return NULL if no record
-    // with key "k" exists.
-    virtual E remove(const Key& k) = 0;
-
-    // Remove and return an arbitrary record from dictionary.
-    // Return: The record removed, or NULL if none exists.
-    virtual E removeAny() = 0;
-
-    // Return: A record matching "k" (NULL if none exists).
-    // If multiple records match, return an arbitrary one.
-    // k: The key of the record to find
-    virtual E find(const Key& k) const = 0;
-
-    // Return the number of records in the dictionary.
-    virtual int size() = 0;
-};
-
-
-// Binary tree node abstract class
-template <typename E> class BinNode {
-public:
-    virtual ~BinNode() {} // Base destructor
-
-    // Return the node's value
-    virtual E& element() = 0;
-
-    // Set the node's value
-    virtual void setElement(const E&) = 0;
-
-    // Return the node's left child
-    virtual BinNode* left() const = 0;
-
-    // Set the node's left child
-    virtual void setLeft(BinNode*) = 0;
-
-    // Return the node's right child
-    virtual BinNode* right() const = 0;
-
-    // Set the node's right child
-    virtual void setRight(BinNode*) = 0;
-
-    // Return true if the node is a leaf, false otherwise
-    virtual bool isLeaf() = 0;
-};
-
-
-// Simple binary tree node implementation
-template <typename Key, typename E>
-class BSTNode : public BinNode<E> {
-private:
-    Key k;                  // The node's key
-    E it;                   // The node's value
-    BSTNode* lc;            // Pointer to left child
-    BSTNode* rc;            // Pointer to right child
-
-public:
-    // Two constructors -- with and without initial values
-    BSTNode() { lc = rc = NULL; }
-    BSTNode(Key K, E e, BSTNode* l =NULL, BSTNode* r =NULL)
-    { k = K; it = e; lc = l; rc = r; }
-    ~BSTNode() {}             // Destructor
-
-    // Functions to set and return the value and key
-    E& element() { return it; }
-    void setElement(const E& e) { it = e; }
-    Key& key() { return k; }
-    void setKey(const Key& K) { k = K; }
-
-    // Functions to set and return the children
-    inline BSTNode* left() const { return lc; }
-    void setLeft(BinNode<E>* b) { lc = (BSTNode*)b; }
-    inline BSTNode* right() const { return rc; }
-    void setRight(BinNode<E>* b) { rc = (BSTNode*)b; }
-
-    // Return true if it is a leaf, false otherwise
-    bool isLeaf() { return (lc == NULL) && (rc == NULL); }
-};
-
+// Include the dictionary ADT
+//#include "dictionary.h"
 
 // Binary Search Tree implementation for the Dictionary ADT
 template <typename Key, typename E>
@@ -212,9 +98,8 @@ clearhelp(BSTNode<Key, E>* root) {
 
 // Insert a node into the BST, returning the updated tree
 template <typename Key, typename E>
-BSTNode<Key, E>* BST<Key, E>::inserthelp( BSTNode<Key, E>* root,
-                                         const Key& k,
-                                         const E& it ) {
+BSTNode<Key, E>* BST<Key, E>::
+inserthelp( BSTNode<Key, E>* root, const Key& k, const E& it ) {
     if (root == NULL)  // Empty tree: create node
         return new BSTNode<Key, E>(k, it, NULL, NULL);
     if (k < root->key())
@@ -276,7 +161,8 @@ removehelp(BSTNode<Key, E>* rt, const Key& k) {
 
 // Find a node with the given key value
 template <typename Key, typename E>
-E BST<Key, E>::findhelp(BSTNode<Key, E>* root, const Key& k) const {
+E BST<Key, E>::
+findhelp(BSTNode<Key, E>* root, const Key& k) const {
     if (root == NULL) return NULL;          // Empty tree
     if (k < root->key())
         return findhelp(root->left(), k);   // Check left
@@ -291,49 +177,10 @@ void BST<Key, E>::
 printhelp(BSTNode<Key, E>* root, int level) const {
     if (root == NULL) return;           // Empty tree
     printhelp(root->left(), level+1);   // Do left subtree
-    cout << root->key() << ", ";        // Print node value
+    for (int i=0; i<level; i++)         // Indent to level
+        cout << "  ";
+    cout << root->key() << "\n";        // Print node value
     printhelp(root->right(), level+1);  // Do right subtree
 }
 
-// -------------------------
-// Solution:
-// -------------------------
-void BSTSort(int list[]) {
-    // Create an instance of BST
-    BST<int, int> tree;
-    
-    // use the BST insert function to place items
-    // in order into the BST instance
-    for (int i = 0; i < 10; i++ ) {
-        // the key and the value of the node will be the same
-        tree.insert(list[i], list[i]);
-        // print each item that is added to the tree
-        cout << "value added to BST: " << list[i] << endl;
-    }
 
-    // use the BST print function to print
-    // all items in the BST
-    cout << "Print in order: ";
-    tree.print();
-
-    return;
-    /*
-     Run time for best and worst case: O(n^2  log(n)) 
-     1. add each node individually O(n). 
-     2. place the node in the correct location (aka insert) is O(logn).
-     3. print each node O(n).
-     */
-}
-
-using namespace std;
-
-int main(int argc, const char * argv[]) {
-
-
-    int unsortedList[10] =  {4, 1, 5, 2, 9, 8, 7, 0, 3, 6};
-
-    BSTSort(unsortedList);
-
-    cout << "\n";
-    return 0;
-}

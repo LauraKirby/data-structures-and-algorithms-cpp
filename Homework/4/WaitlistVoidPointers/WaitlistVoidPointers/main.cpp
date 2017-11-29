@@ -154,8 +154,8 @@ template <typename E>
 // DEMO FUNCTION: A function that accepts a void pointer
 // void f(const void* a)
 // {
-//     std::cout<<"(void*)fun is called\n";
-//    std::cout<< "value for a: " << *(int*)a << '\n';
+//    std::cout << "void f(const void* a) was called\n";
+//    std::cout << "value for a: " << *(int*)a << '\n';
 // }
 
 int main() {
@@ -181,6 +181,19 @@ int main() {
     void* doubleVoidPtr2 = static_cast<double*>(&double2);
 
     LQueue<int> lQue;
+    // add items with void pointer to queue
+    // issue: since we have several different types,
+    // once the items are in the queue, we will never
+    // know the type. Thus, we cannot preform functions
+    // on the data.
+    //
+    // within "DEMO FUNCTION", see that we are only able
+    // to use the data and cast it because we know the type
+    //
+    // i believe (unsure) a better solution is described
+    // in the "Answer" of this stackoverflow question:
+    // https://stackoverflow.com/questions/6118721/using-c-templates-in-linked-lists-with-multiple-different-types-appearing-in
+
     lQue.enqueue(1, strVoidPtr);
     lQue.enqueue(2, strVoidPtr2);
     lQue.enqueue(3, intVoidPtr);
@@ -190,7 +203,7 @@ int main() {
 
     // store front value in variable "peek2" and print to ensure new front value is 10
     const int peek2 = lQue.frontValue();
-    cout << peek2 << endl;
+    cout << "peek: " << peek2 << endl;
 
     // store length in variable "qLength" and print to ensure length returns 6
     // check length of queue
