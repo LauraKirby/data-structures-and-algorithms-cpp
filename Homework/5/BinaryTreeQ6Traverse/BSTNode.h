@@ -22,37 +22,37 @@ using namespace std;
 // template implementation
 
 
-
 // Simple binary tree node implementation
 template <typename Key, typename E>
 class BSTNode : public BinNode<E> {
 private:
-    Key k;                  // The node's key
-    E it;                   // The node's value
-    BSTNode* lc;            // Pointer to left child
-    BSTNode* rc;            // Pointer to right child
+    Key k;                          // The node's key
+    E item;                         // The node's value
+    BSTNode* leftChild;             // Pointer to left child
+    BSTNode* rightChild;            // Pointer to right child
 
 public:
     // Two constructors -- with and without initial values
-    BSTNode() { lc = rc = NULL; }
-    BSTNode(Key K, E e, BSTNode* l =NULL, BSTNode* r =NULL)
-    { k = K; it = e; lc = l; rc = r; }
+    BSTNode() { leftChild = rightChild = NULL; }
+    BSTNode(Key K, E e, BSTNode* l = NULL, BSTNode* r = NULL)
+    { k = K; item = e; leftChild = l; rightChild = r; }
     ~BSTNode() {}             // Destructor
 
     // Functions to set and return the value and key
-    E& element() { return it; }
-    void setElement(const E& e) { it = e; }
+    E& element() { return item; }
+    void setElement(const E& e) { item = e; }
     Key& key() { return k; }
     void setKey(const Key& K) { k = K; }
 
     // Functions to set and return the children
-    inline BSTNode* left() const { return lc; }
-    void setLeft(BinNode<E>* b) { lc = (BSTNode*)b; }
-    inline BSTNode* right() const { return rc; }
-    void setRight(BinNode<E>* b) { rc = (BSTNode*)b; }
+    inline BSTNode* left() const { return leftChild; }
+    void setLeft(BinNode<E>* b) { leftChild = (BSTNode*)b; }
+
+    inline BSTNode* right() const { return rightChild; }
+    void setRight(BinNode<E>* b) { rightChild = (BSTNode*)b; }
 
     // Return true if it is a leaf, false otherwise
-    bool isLeaf() { return (lc == NULL) && (rc == NULL); }
+    bool isLeaf() { return (leftChild == NULL) && (rightChild == NULL); }
 };
 
 
