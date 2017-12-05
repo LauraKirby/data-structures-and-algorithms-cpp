@@ -195,9 +195,16 @@ public:
         else return NULL;
     }
 
-    E getRoot(){
+    BSTNode<int, int>* getRoot(){
         return root;
     }
+
+    // BinaryTreeNode<Key,E>* getroot() { return root; }
+    BSTNode<Key,E>* getroot() {
+        BSTNode<int,int>* node = root;
+        cout << "node->element()" << node->element() << endl;
+        return node;
+    };
 
     int getKey(){
         return root->key();
@@ -398,6 +405,7 @@ int main(int argc, const char * argv[]) {
     tree1->clear();
     tree2->clear();
     tree3->clear();
+
 
     return 0;
 }
