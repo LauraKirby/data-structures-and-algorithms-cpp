@@ -34,9 +34,6 @@ private:
     BinarySearchTreeNode<Key,E>* removeHelper(BinarySearchTreeNode<Key, E>*, const Key&);
     E findHelper(BinarySearchTreeNode<Key, E>*, const Key&) const;
     void printHelper(BinarySearchTreeNode<Key, E>*, int) const;
-    void printLeftHelper(BinarySearchTreeNode<Key, E>*, int) const;
-    void printRightHelper(BinarySearchTreeNode<Key, E>*, int) const;
-    void printLeavesHelper(BinarySearchTreeNode<Key, E>*, int) const;
 
 
 public:
@@ -53,6 +50,12 @@ public:
         root = insertHelper(root, k, e);
         nodecount++;
     }
+
+    // BinaryTreeNode<Key,E>* getroot() { return root; }
+    BinaryNode<Key>* getroot() {
+        BinaryNode<int>* node = root;
+        return node;
+    };
 
     // Remove a record from the tree.
     // k Key value of record to remove.
@@ -91,34 +94,6 @@ public:
     void print() const {                            // Print the contents of the BST
         if (root == NULL) cout << "The BST is empty.\n";
         else printHelper(root, 0);
-    }
-
-    void printLeft() const {                        // Print left side of tree
-        cout << "\n\n-----------------" << "\n printLeft: \n" << "-----------------\n";
-        if (root == NULL) cout << "The BST is empty.\n";
-        else {
-            cout << "root: " << root->key() << "\n" << "Left nodes: \n";
-            if (root->left() == NULL) cout << "There are no nodes to the left\n";
-            printLeftHelper(root->left(), 0);       // Move down and print left subtree
-        }
-        return;
-    }
-
-    void printRight() const {                       // Print right side of tree
-        cout << "\n\n-----------------" << "\n printRight: \n" << "-----------------\n";
-        if (root == NULL) cout << "The BST is empty.\n";
-        else {
-            cout << "root: " << root->key() << "\n" << "Right nodes: \n";
-            if (root->right() == NULL) cout << "There are no nodes to the right\n";
-            printRightHelper(root->right(), 0);     // Move down and print right subtree
-        }
-        return;
-    }
-
-    void printLeaves() const {
-        cout << "\n\n-----------------" << "\n printLeaves: \n" << "-----------------\n";
-        if (root == NULL) cout << "The BST is empty.\n";
-        else if (root->left() != NULL || root->right() != NULL) printLeavesHelper(root, 0);
     }
 };
 
@@ -218,44 +193,6 @@ printHelper(BinarySearchTreeNode<Key, E>* root, int level) const {
         cout << "  ";
     cout << root->key() << "\n";                    // Print node value
     printHelper(root->right(), level+1);            // Do right subtree
-}
-
-template <typename Key, typename E>
-void BST<Key, E>::
-printLeftHelper(BinarySearchTreeNode<Key, E>* root, int level) const {
-    // as long as "root" holds a "truthy" value
-    // continue to move down the the tree, with each call, pass in root->left
-    if (root == NULL) return;
-    printLeftHelper(root->left(), level+1);             // Move down the left subtree
-    cout << "left: " << root->key() << "\n";            // Print node value
-}
-
-template <typename Key, typename E>
-void BST<Key, E>::
-printRightHelper(BinarySearchTreeNode<Key, E>* root, int level) const {
-    // as long as "root" holds a "truthy" value
-    // continue to move down the the tree, with each call, pass in root->right
-    if (root == NULL) return;
-    printRightHelper(root->right(), level+1);       // Move down the right subtree
-    cout << "right: " << root->key() << "\n";       // Print node value
-}
-
-template <typename Key, typename E>
-void BST<Key, E>::
-printLeavesHelper(BinarySearchTreeNode<Key, E>* root, int level) const {
-    if (root == NULL) {
-        return;
-    // if 1) root node is present, 2) left is "falsey", 3) right is falsey
-    // then, we are at a leaf - print the key for this node
-    } else if (root != NULL && !root->left() && !root->right()) {
-        // Only print when a node does not have a left or a night value.
-        if (root->key() != NULL) cout << "leaf: " << root->key() << endl;
-
-    // if 1) left is "truthy" and 2) right is "truthy" - continue moving down/up the tree
-    } else {
-        printLeavesHelper(root->left(), level+1);          // Move to bottom of left subtree
-        printLeavesHelper(root->right(), level+1);
-    }
 }
 
 #endif

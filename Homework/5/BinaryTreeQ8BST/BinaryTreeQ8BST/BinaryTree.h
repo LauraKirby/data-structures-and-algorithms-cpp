@@ -35,13 +35,10 @@ private:
     BinaryTreeNode<Key,E>* removeHelper(BinaryTreeNode<Key, E>*, const Key&);
     E findHelper(BinaryTreeNode<Key, E>*, const Key&) const;
     void printHelper(BinaryTreeNode<Key, E>*, int) const;
-    void printLeftHelper(BinaryTreeNode<Key, E>*, int) const;
-    void printRightHelper(BinaryTreeNode<Key, E>*, int) const;
-    void printLeavesHelper(BinaryTreeNode<Key, E>*, int) const;
 
 
 public:
-    BinaryTree() { root = NULL; nodecount = 0; }  // Constructor
+    BinaryTree() { root = NULL; nodecount = 0; }    // Constructor
     ~BinaryTree() { clearHelper(root); }            // Destructor
 
     void clear()   // Reinitialize tree
@@ -54,6 +51,12 @@ public:
         root = insertHelper(root, k, e);
         nodecount++;
     }
+
+    // BinaryTreeNode<Key,E>* getroot() { return root; }
+    BinaryTreeNode<Key,E>* getroot() {
+        BinaryTreeNode<int,int>* node = root;
+        return node;
+    };
 
     // Remove a record from the tree.
     // k Key value of record to remove.
@@ -93,35 +96,8 @@ public:
         if (root == NULL) cout << "The BinaryTree is empty.\n";
         else printHelper(root, 0);
     }
-
-    void printLeft() const {                        // Print left side of tree
-        cout << "\n\n-----------------" << "\n printLeft: \n" << "-----------------\n";
-        if (root == NULL) cout << "The BinaryTree is empty.\n";
-        else {
-            cout << "root: " << root->key() << "\n" << "Left nodes: \n";
-            if (root->left() == NULL) cout << "There are no nodes to the left\n";
-            printLeftHelper(root->left(), 0);       // Move down and print left subtree
-        }
-        return;
-    }
-
-    void printRight() const {                       // Print right side of tree
-        cout << "\n\n-----------------" << "\n printRight: \n" << "-----------------\n";
-        if (root == NULL) cout << "The BinaryTree is empty.\n";
-        else {
-            cout << "root: " << root->key() << "\n" << "Right nodes: \n";
-            if (root->right() == NULL) cout << "There are no nodes to the right\n";
-            printRightHelper(root->right(), 0);     // Move down and print right subtree
-        }
-        return;
-    }
-
-    void printLeaves() const {
-        cout << "\n\n-----------------" << "\n printLeaves: \n" << "-----------------\n";
-        if (root == NULL) cout << "The BinaryTree is empty.\n";
-        else if (root->left() != NULL || root->right() != NULL) printLeavesHelper(root, 0);
-    }
 };
+
 
 // Clean up BinaryTree by releasing space back free store
 template <typename Key, typename E>
@@ -135,25 +111,29 @@ clearHelper(BinaryTreeNode<Key, E>* root) {
 
 // Insert a node into the BinaryTree, returning the updated tree
 template <typename Key, typename E>
-BinaryTreeNode<Key, E>* BinaryTree<Key, E>::
-insertHelper( BinaryTreeNode<Key, E>* root, const Key& k, const E& it ) {
+BinaryTreeNode<Key, E>* BinaryTree<Key, E>::insertHelper(
+BinaryTreeNode<Key, E>* root, const Key& k, const E& it ) {
     if (root == NULL)  // Empty tree: create node
         return new BinaryTreeNode<Key, E>(k, it, NULL, NULL);
-    if (k < root->key())
-        root->setLeft(insertHelper(root->left(), k, it));
-    else root->setRight(insertHelper(root->right(), k, it));
-    return root;       // Return tree with node inserted
+    else {
+        if ( nodecount % 2 == 1) // condition whether to go to left or right
+            root->setLeft(insertHelper(root->left(), k, it));
+        else
+            root->setRight(insertHelper(root->right(), k, it));
+        return root; // Return tree with node inserted
+    }
 }
 
-// Delete the minimum value from the BinaryTree, returning the revised BinaryTree
+// return BinaryTreeNode with the smallest value
 template <typename Key, typename E>
 BinaryTreeNode<Key, E>* BinaryTree<Key, E>::
 getMin(BinaryTreeNode<Key, E>* rightTree) {
-    if (rightTree->left() == NULL)
+    if (rightTree->left() == NULL){
         return rightTree;
-    else return getMin(rightTree->left());
+    } else return getMin(rightTree->left());
 }
 
+// Delete the minimum value from the BinaryTree, returning the revised BinaryTree
 template <typename Key, typename E>
 BinaryTreeNode<Key, E>* BinaryTree<Key, E>::
 deleteMin(BinaryTreeNode<Key, E>* rightTree) {
@@ -221,42 +201,5 @@ printHelper(BinaryTreeNode<Key, E>* root, int level) const {
     printHelper(root->right(), level+1);            // Do right subtree
 }
 
-template <typename Key, typename E>
-void BinaryTree<Key, E>::
-printLeftHelper(BinaryTreeNode<Key, E>* root, int level) const {
-    // as long as "root" holds a "truthy" value
-    // continue to move down the the tree, with each call, pass in root->left
-    if (root == NULL) return;
-    printLeftHelper(root->left(), level+1);             // Move down the left subtree
-    cout << "left: " << root->key() << "\n";            // Print node value
-}
-
-template <typename Key, typename E>
-void BinaryTree<Key, E>::
-printRightHelper(BinaryTreeNode<Key, E>* root, int level) const {
-    // as long as "root" holds a "truthy" value
-    // continue to move down the the tree, with each call, pass in root->right
-    if (root == NULL) return;
-    printRightHelper(root->right(), level+1);       // Move down the right subtree
-    cout << "right: " << root->key() << "\n";       // Print node value
-}
-
-template <typename Key, typename E>
-void BinaryTree<Key, E>::
-printLeavesHelper(BinaryTreeNode<Key, E>* root, int level) const {
-    if (root == NULL) {
-        return;
-        // if 1) root node is present, 2) left is "falsey", 3) right is falsey
-        // then, we are at a leaf - print the key for this node
-    } else if (root != NULL && !root->left() && !root->right()) {
-        // Only print when a node does not have a left or a night value.
-        if (root->key() != NULL) cout << "leaf: " << root->key() << endl;
-
-        // if 1) left is "truthy" and 2) right is "truthy" - continue moving down/up the tree
-    } else {
-        printLeavesHelper(root->left(), level+1);          // Move to bottom of left subtree
-        printLeavesHelper(root->right(), level+1);
-    }
-}
 
 #endif
