@@ -52,7 +52,7 @@ public:
         nodecount++;
     }
 
-    // BinaryTreeNode<Key,E>* getroot() { return root; }
+    // return tree root
     BinaryTreeNode<Key,E>* getroot() {
         BinaryTreeNode<int,int>* node = root;
         return node;
