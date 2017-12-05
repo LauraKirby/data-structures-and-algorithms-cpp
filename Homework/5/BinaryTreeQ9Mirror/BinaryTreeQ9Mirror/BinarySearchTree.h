@@ -18,6 +18,7 @@
 #include "dictionary.h"
 using namespace std;
 
+
 // Binary Search Tree implementation for the Dictionary ADT
 template <typename Key, typename E>
 class BST : public Dictionary<Key,E> {

@@ -48,6 +48,7 @@ public:
 
     // Return true if it is a leaf, false otherwise
     bool isLeaf() { return (leftChild == NULL) && (rightChild == NULL); }
+
 };
 
 #endif
