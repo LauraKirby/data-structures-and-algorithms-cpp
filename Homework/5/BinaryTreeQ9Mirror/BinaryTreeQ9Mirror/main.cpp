@@ -167,14 +167,6 @@ public:
         return node;
     };
 
-    void setRightElement(BinarySearchTreeNode<Key, E>* node, int value){
-        node->right = value;
-    }
-
-    void setLeftElement(BinarySearchTreeNode<Key, E>* node, int value){
-        node->left = value;
-    }
-
     // Remove a record from the tree.
     // k Key value of record to remove.
     // Return: The record removed, or NULL if there is none.

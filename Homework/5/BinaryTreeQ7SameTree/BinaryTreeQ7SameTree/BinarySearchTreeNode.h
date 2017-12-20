@@ -15,8 +15,6 @@ using namespace std;
 // This is the file to include for access to the complete binary node
 // template implementation
 
-
-// Simple binary tree node implementation
 // Simple binary tree node implementation
 template <typename Key, typename E>
 class BinarySearchTreeNode : public BinaryNode<E> {

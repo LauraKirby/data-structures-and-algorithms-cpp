@@ -7,12 +7,20 @@
 //
 
 #include <iostream>
+//// ADTs
+//#include "dictionary.h"
+//#include "BinaryNode.h"
+//// Implementation
+//#include "BinarySearchTree.h"
+//#include "BinarySearchTreeNode.h"
 using namespace std;
 
 /*
  NOTE: This program does not comple. I am unsure how to resolve the issue. I did psuedo code a solution and then 
  tried my best to write it in C++. I am getting an error and I'm unsure how to resolve it. I have spent several 
- hours on this problem and need to move forward with the next question.
+ hours on this problem and need to move forward with the next question. (Upate: After completing the rest of the 
+ assignment, I was able to resolve the error, however, i didn't have the time go back and fix the next items. 
+ I didn't realize that the stanford resource provides a description on how to sove these problems)
  
 
  Given two binary trees, write a method named "isSameTree" that returns true if 
@@ -28,42 +36,6 @@ using namespace std;
  2. Test your program with two simple dissimilar trees in the same driver program.
 
  */
-
-// From the software distribution accompanying the textbook
-// "A Practical Introduction to Data Structures and Algorithm Analysis,
-// Third Edition (C++)" by Clifford A. Shaffer.
-// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.
-
-// This file includes all of the pieces of the BST implementation
-
-
-// Binary tree node abstract class
-template <typename E> class BinNode {
-public:
-    virtual ~BinNode() {} // Base destructor
-
-    // Return the node's value
-    virtual E& element() = 0;
-
-    // Set the node's value
-    virtual void setElement(const E&) = 0;
-
-    // Return the node's left child
-    virtual BinNode* left() const = 0;
-
-    // Set the node's left child
-    virtual void setLeft(BinNode*) = 0;
-
-    // Return the node's right child
-    virtual BinNode* right() const = 0;
-
-    // Set the node's right child
-    virtual void setRight(BinNode*) = 0;
-
-    // Return true if the node is a leaf, false otherwise
-    virtual bool isLeaf() = 0;
-};
-
 
 // The Dictionary abstract class.
 template <typename Key, typename E>
@@ -102,25 +74,50 @@ public:
 
     // Return the number of records in the dictionary.
     virtual int size() = 0;
-
 };
 
+// Binary node abstract class
+template <typename E> class BinaryNode {
+public:
+    virtual ~BinaryNode() {} // Base destructor
+
+    // Return the node's value
+    virtual E& element() = 0;
+
+    // Set the node's value
+    virtual void setElement(const E&) = 0;
+
+    // Return the node's left child
+    virtual BinaryNode* left() const = 0;
+
+    // Set the node's left child
+    virtual void setLeft(BinaryNode*) = 0;
+
+    // Return the node's right child
+    virtual BinaryNode* right() const = 0;
+
+    // Set the node's right child
+    virtual void setRight(BinaryNode*) = 0;
+
+    // Return true if the node is a leaf, false otherwise
+    virtual bool isLeaf() = 0;
+};
 
 // Simple binary tree node implementation
 template <typename Key, typename E>
-class BSTNode : public BinNode<E> {
+class BinarySearchTreeNode : public BinaryNode<E> {
 private:
     Key k;                          // The node's key
     E item;                         // The node's value
-    BSTNode* leftChild;             // Pointer to left child
-    BSTNode* rightChild;            // Pointer to right child
+    BinarySearchTreeNode* leftChild;             // Pointer to left child
+    BinarySearchTreeNode* rightChild;            // Pointer to right child
 
 public:
     // Two constructors -- with and without initial values
-    BSTNode() { leftChild = rightChild = NULL; }
-    BSTNode(Key K, E e, BSTNode* l = NULL, BSTNode* r = NULL)
+    BinarySearchTreeNode() { leftChild = rightChild = NULL; }
+    BinarySearchTreeNode(Key K, E e, BinarySearchTreeNode* l = NULL, BinarySearchTreeNode* r = NULL)
     { k = K; item = e; leftChild = l; rightChild = r; }
-    ~BSTNode() {}             // Destructor
+    ~BinarySearchTreeNode() {}             // Destructor
 
     // Functions to set and return the value and key
     E& element() { return item; }
@@ -129,32 +126,34 @@ public:
     void setKey(const Key& K) { k = K; }
 
     // Functions to set and return the children
-    inline BSTNode* left() const { return leftChild; }
-    void setLeft(BinNode<E>* b) { leftChild = (BSTNode*)b; }
+    inline BinarySearchTreeNode* left() const { return leftChild; }
+    void setLeft(BinaryNode<E>* b) { leftChild = (BinarySearchTreeNode*)b; }
 
-    inline BSTNode* right() const { return rightChild; }
-    void setRight(BinNode<E>* b) { rightChild = (BSTNode*)b; }
+    inline BinarySearchTreeNode* right() const { return rightChild; }
+    void setRight(BinaryNode<E>* b) { rightChild = (BinarySearchTreeNode*)b; }
 
     // Return true if it is a leaf, false otherwise
     bool isLeaf() { return (leftChild == NULL) && (rightChild == NULL); }
+    
 };
 
 // Binary Search Tree implementation for the Dictionary ADT
 template <typename Key, typename E>
 class BST : public Dictionary<Key,E> {
 private:
-    BSTNode<Key,E>* root;   // Root of the BST
+    BinarySearchTreeNode<Key,E>* root;   // Root of the BST
     int nodecount;          // Number of nodes in the BST
 
     // Private "helper" functions
-    void clearHelper(BSTNode<Key, E>*);
-    BSTNode<Key,E>* insertHelper(BSTNode<Key, E>*,
-                                 const Key&, const E&);
-    BSTNode<Key,E>* deleteMin(BSTNode<Key, E>*);
-    BSTNode<Key,E>* getMin(BSTNode<Key, E>*);
-    BSTNode<Key,E>* removeHelper(BSTNode<Key, E>*, const Key&);
-    E findHelper(BSTNode<Key, E>*, const Key&) const;
-    void printHelper(BSTNode<Key, E>*, int) const;
+    void clearHelper(BinarySearchTreeNode<Key, E>*);
+    BinarySearchTreeNode<Key,E>* insertHelper(BinarySearchTreeNode<Key, E>*,
+                                              const Key&, const E&);
+    BinarySearchTreeNode<Key,E>* deleteMin(BinarySearchTreeNode<Key, E>*);
+    BinarySearchTreeNode<Key,E>* getMin(BinarySearchTreeNode<Key, E>*);
+    BinarySearchTreeNode<Key,E>* removeHelper(BinarySearchTreeNode<Key, E>*, const Key&);
+    E findHelper(BinarySearchTreeNode<Key, E>*, const Key&) const;
+    void printHelper(BinarySearchTreeNode<Key, E>*, int) const;
+
 
 public:
     BST() { root = NULL; nodecount = 0; }  // Constructor
@@ -169,6 +168,20 @@ public:
     void insert(const Key& k, const E& e) {
         root = insertHelper(root, k, e);
         nodecount++;
+    }
+
+    // Get root of current tree
+    BinaryNode<Key>* getroot() {
+        BinaryNode<int>* node = root;
+        return node;
+    };
+
+    void setRightElement(BinarySearchTreeNode<Key, E>* node, int value){
+        node->right = value;
+    }
+
+    void setLeftElement(BinarySearchTreeNode<Key, E>* node, int value){
+        node->left = value;
     }
 
     // Remove a record from the tree.
@@ -195,21 +208,6 @@ public:
         else return NULL;
     }
 
-    BSTNode<int, int>* getRoot(){
-        return root;
-    }
-
-    // BinaryTreeNode<Key,E>* getroot() { return root; }
-    BSTNode<Key,E>* getroot() {
-        BSTNode<int,int>* node = root;
-        cout << "node->element()" << node->element() << endl;
-        return node;
-    };
-
-    int getKey(){
-        return root->key();
-    }
-
     // Return Record with key value k, NULL if none exist.
     // k: The key value to find. */
     // Return some record matching "k".
@@ -229,7 +227,7 @@ public:
 // Clean up BST by releasing space back free store
 template <typename Key, typename E>
 void BST<Key, E>::
-clearHelper(BSTNode<Key, E>* root) {
+clearHelper(BinarySearchTreeNode<Key, E>* root) {
     if (root == NULL) return;
     clearHelper(root->left());
     clearHelper(root->right());
@@ -238,10 +236,10 @@ clearHelper(BSTNode<Key, E>* root) {
 
 // Insert a node into the BST, returning the updated tree
 template <typename Key, typename E>
-BSTNode<Key, E>* BST<Key, E>::
-insertHelper( BSTNode<Key, E>* root, const Key& k, const E& it ) {
+BinarySearchTreeNode<Key, E>* BST<Key, E>::
+insertHelper( BinarySearchTreeNode<Key, E>* root, const Key& k, const E& it ) {
     if (root == NULL)  // Empty tree: create node
-        return new BSTNode<Key, E>(k, it, NULL, NULL);
+        return new BinarySearchTreeNode<Key, E>(k, it, NULL, NULL);
     if (k < root->key())
         root->setLeft(insertHelper(root->left(), k, it));
     else root->setRight(insertHelper(root->right(), k, it));
@@ -250,16 +248,16 @@ insertHelper( BSTNode<Key, E>* root, const Key& k, const E& it ) {
 
 // Delete the minimum value from the BST, returning the revised BST
 template <typename Key, typename E>
-BSTNode<Key, E>* BST<Key, E>::
-getMin(BSTNode<Key, E>* rightTree) {
+BinarySearchTreeNode<Key, E>* BST<Key, E>::
+getMin(BinarySearchTreeNode<Key, E>* rightTree) {
     if (rightTree->left() == NULL)
         return rightTree;
     else return getMin(rightTree->left());
 }
 
 template <typename Key, typename E>
-BSTNode<Key, E>* BST<Key, E>::
-deleteMin(BSTNode<Key, E>* rightTree) {
+BinarySearchTreeNode<Key, E>* BST<Key, E>::
+deleteMin(BinarySearchTreeNode<Key, E>* rightTree) {
     if (rightTree->left() == NULL)                     // Found min
         return rightTree->right();
     else {                                             // Continue left
@@ -271,15 +269,15 @@ deleteMin(BSTNode<Key, E>* rightTree) {
 // Remove a node with key value k
 // Return: The tree with the node removed
 template <typename Key, typename E>
-BSTNode<Key, E>* BST<Key, E>::
-removeHelper(BSTNode<Key, E>* rightTree, const Key& k) {
+BinarySearchTreeNode<Key, E>* BST<Key, E>::
+removeHelper(BinarySearchTreeNode<Key, E>* rightTree, const Key& k) {
     if (rightTree == NULL) return NULL;             // k is not in tree
     else if (k < rightTree->key())
         rightTree->setLeft(removeHelper(rightTree->left(), k));
     else if (k > rightTree->key())
         rightTree->setRight(removeHelper(rightTree->right(), k));
     else {                                          // Found: remove it
-        BSTNode<Key, E>* temp = rightTree;
+        BinarySearchTreeNode<Key, E>* temp = rightTree;
         if (rightTree->left() == NULL) {            // Only a right child
             rightTree = rightTree->right();         //  so point to right
             delete temp;
@@ -289,7 +287,7 @@ removeHelper(BSTNode<Key, E>* rightTree, const Key& k) {
             delete temp;
         }
         else {                                      // Both children are non-empty
-            BSTNode<Key, E>* temp = getMin(rightTree->right());
+            BinarySearchTreeNode<Key, E>* temp = getMin(rightTree->right());
             rightTree->setElement(temp->element());
             rightTree->setKey(temp->key());
             rightTree->setRight(deleteMin(rightTree->right()));
@@ -302,7 +300,7 @@ removeHelper(BSTNode<Key, E>* rightTree, const Key& k) {
 // Find a node with the given key value
 template <typename Key, typename E>
 E BST<Key, E>::
-findHelper(BSTNode<Key, E>* root, const Key& k) const {
+findHelper(BinarySearchTreeNode<Key, E>* root, const Key& k) const {
     if (root == NULL) return NULL;                  // Return if empty tree
     if (k < root->key())
         return findHelper(root->left(), k);         // Check left
@@ -314,9 +312,8 @@ findHelper(BSTNode<Key, E>* root, const Key& k) const {
 // Print out a BST
 template <typename Key, typename E>
 void BST<Key, E>::
-printHelper(BSTNode<Key, E>* root, int level) const {
+printHelper(BinarySearchTreeNode<Key, E>* root, int level) const {
     if (root == NULL) return;                       // Return if empty tree
-    //    addToListOfValues(root->key(), root->value(), level);
     printHelper(root->left(), level+1);             // Move down left subtree
     cout << "level: " << level;
     for (int i=0; i<level; i++)                     // Indent to level
@@ -326,57 +323,20 @@ printHelper(BSTNode<Key, E>* root, int level) const {
 }
 
 
-void isSameHelper(BSTNode<int, int>* rootOne, BSTNode<int, int>* rootTwo)  {
-    if (rootOne == NULL || rootOne == NULL)
-        return;
-
-    // the values stored in this specific node location on both trees the key is the same
-    if (rootOne->key() == rootTwo->key()){
-
-        // use recurision to check left side of subtree
-        // will see the same number printed twice if the trees match
-        isSameHelper(rootOne->left(), rootTwo->left());
-
-        cout << "Key value" << rootOne->key() << endl;
-        // use recurision to check right side of subtree
-        isSameHelper(rootOne->right(), rootTwo->right());
-
-        return;
-
-    // the values stored in this specific node location are different
-    } else if (rootOne->key() != rootTwo->key()){
-        cout << "trees do not match" << endl;
-        return;
-    }
+bool isSameTree(BinaryNode<int>* nodeA, BinaryNode<int>* nodeB){
+    // both nodes are empty, return true
+    if (nodeA == NULL && nodeB == NULL) return (true);
+    // both nodes are not empty, compare them
+    // this will never be the final return,
+    else if (nodeA != NULL && nodeB != NULL) {
+        return (
+               nodeA->element() == nodeB->element() &&
+               isSameTree(nodeA->left(), nodeB->left()) &&
+               isSameTree(nodeA->right(), nodeB->right())
+               );
+    } // 3. one empty, one not -> false
+    else return(false);
 }
-
-void isSameTree(BST<int, int>* treeOne, BST<int, int>* treeTwo) {
-
-    // Runtime: After iterating over the entire tree one time, I will know whether or the not
-    // the two trees are the same. O(N)
-
-    // if either trees are empty return false
-    if (treeOne->getRoot() == NULL || treeTwo->getRoot() == NULL) {
-        cout << "at least one tree is empty\n";
-        return;
-    } else {
-        // create two roots that will be passed into "isSameHelper", we will want to check the values of their subtrees
-        int k1 = treeOne->getKey();
-        int k2 = treeOne->getKey();
-        BSTNode<int, int> root1 = *new BSTNode<int, int>(k1, k1, NULL, NULL);
-        BSTNode<int, int> root2 = *new BSTNode<int, int>(k2, k2, NULL, NULL);
-
-        //if the two trees are valid, use the helper method to determine if they are the same
-        isSameHelper(&root1, &root2);
-
-        //deallotcate nodes created to check trees
-        delete &root1;
-        delete &root2;
-    }
-}
-
-
-
 
 int main(int argc, const char * argv[]) {
     int nums[5] = {11,6,4,5,8};
@@ -385,8 +345,6 @@ int main(int argc, const char * argv[]) {
     BST<int, int>* tree1;
     BST<int, int>* tree2;
     BST<int, int>* tree3;
-
-    cout << "Size: " << tree1->size() << "\n";
 
     // create same tree
     for(int i = 0; i < 5; i++){
@@ -398,9 +356,7 @@ int main(int argc, const char * argv[]) {
     for(int i = 0; i < 5; i++){
         tree3->insert(nums2[i], nums2[i]);
     }
-    
-    isSameTree(tree1, tree2);
-    
+
     cout << "\n\nSize: " << tree1->size() << "\n";
     tree1->clear();
     tree2->clear();

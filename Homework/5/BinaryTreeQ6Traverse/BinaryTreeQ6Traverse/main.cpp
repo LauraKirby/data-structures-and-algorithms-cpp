@@ -22,14 +22,6 @@ using namespace std;
  4. in each of the above cases, analyse the time complexity of your program for the best and worst cases in terms of the height, h of the tree and write it as a comment in your method
 */
 
-// From the software distribution accompanying the textbook
-// "A Practical Introduction to Data Structures and Algorithm Analysis,
-// Third Edition (C++)" by Clifford A. Shaffer.
-// Source code Copyright (C) 2007-2011 by Clifford A. Shaffer.
-
-// This file includes all of the pieces of the BST implementation
-
-
 // Binary tree node abstract class
 template <typename E> class BinNode {
 public:

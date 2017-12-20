@@ -1,0 +1,2 @@
+heapsort: best, worst and average: O(n log n)
+advantage: load all values into the tree at once, binary tree is balances, array representation is space efficient
