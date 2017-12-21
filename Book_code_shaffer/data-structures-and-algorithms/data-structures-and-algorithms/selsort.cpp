@@ -30,5 +30,5 @@ void sort(E* array, int n) {
 #include "sortmain.cpp"
 
 int main(int argc, char** argv) {
-    return sortmain<minintCompare>(argc, argv);
+  return sortmain<minintCompare>(argc, argv);
 }
